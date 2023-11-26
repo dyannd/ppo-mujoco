@@ -11,7 +11,17 @@ os.makedirs(log_dir, exist_ok = True)
 ENV = 'HalfCheetah-v4'
 
 def train():
-    model = PPO('MlpPolicy', ENV, verbose=1, device="cuda", tensorboard_log=log_dir) #MlpNN #change hyperParams
+    model = PPO('MlpPolicy', ENV, device="cuda", learning_rate=0.00001, n_steps=2048, 
+                batch_size=64, n_epochs=50, gamma=0.99, gae_lambda=0.95, clip_range=0.2, clip_range_vf=None, 
+                normalize_advantage=True, ent_coef=0.1, tensorboard_log=log_dir) #MlpNN #change hyperParams
+    TIMESTEPS = 500000
+    model = PPO('MlpPolicy', ENV, device="cuda", learning_rate=0.00002, n_steps=512, 
+                batch_size=64, n_epochs=25, gamma=0.98, gae_lambda=0.92, clip_range=0.1, clip_range_vf=None, 
+                normalize_advantage=True, ent_coef=0.0004, max_grad_norm = 0.8, vf_coef = 0.58, tensorboard_log=log_dir) #MlpNN #change hyperParams
+    TIMESTEPS = 1000000
+    model = PPO('MlpPolicy', ENV, device="cuda", learning_rate=0.000025, n_steps=1024, 
+                batch_size=64, n_epochs=50, gamma=0.98, gae_lambda=0.92, clip_range=0.1, clip_range_vf=None, 
+                normalize_advantage=True, ent_coef=0.0004, max_grad_norm = 0.8, vf_coef = 0.58, tensorboard_log=log_dir) #MlpNN #change hyperParams
     TIMESTEPS = 1000000
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False)
     model.save(f"{model_dir}/PPO_{TIMESTEPS}")
